@@ -1,0 +1,2 @@
+http://stackoverflow.com/questions/3332045/bash-force-execd-process-to-have-unbuffered-stdout
+http://stackoverflow.com/questions/4230837/java-cant-get-stdout-data-from-process-unless-its-manually-flushed
