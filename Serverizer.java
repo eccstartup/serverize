@@ -4,15 +4,15 @@ import java.util.*;
 public class Serverizer {
     
     static class ReaderThread extends Thread {
-        InputStream stdout;
-        ReaderThread(InputStream stdout) {
-            this.stdout = stdout;
+        InputStream in;
+        ReaderThread(InputStream in) {
+            this.in = in;
         }
         public void run() {
             try {
                 byte[] buffer = new byte[1024];
                 while (true) {
-                    int count = stdout.read(buffer);
+                    int count = in.read(buffer);
                     if (count == -1) break;
                     System.out.write(buffer, 0, count);
                 }
