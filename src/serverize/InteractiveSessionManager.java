@@ -14,18 +14,30 @@ public class InteractiveSessionManager {
     }
 
     private Map<String, InteractiveSession> sessions;
+    private Map<String, Watchdog> watchdogs;
 
     private InteractiveSessionManager() {
         sessions = new ConcurrentHashMap<String, InteractiveSession>();
+        watchdogs = new ConcurrentHashMap<String, Watchdog>();
     }
 
     public String newSession(String program) {
         try {
-            InteractiveSession session = new InteractiveSession(program);
-            // TODO timeout thread
-
-            String sessionId = UUID.randomUUID().toString();
+            final InteractiveSession session = new InteractiveSession(program);
+            final String sessionId = UUID.randomUUID().toString();
             sessions.put(sessionId, session);
+
+            Watchdog watchdog = new Watchdog(sessionId, session, sessions);
+            watchdogs.put(sessionId, watchdog);
+            watchdog.start();
+
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                public void run() {
+                    System.out.println("runtime is shutting down... destroy session " + sessionId);
+                    session.destroy();
+                }
+            });
+
             return sessionId;
         }
         catch (IOException | InterruptedException e) {
@@ -35,6 +47,10 @@ public class InteractiveSessionManager {
     }
 
     public InteractiveSession getSession(String sessionId) {
+        Watchdog watchdog = watchdogs.get(sessionId);
+        if (watchdog != null) {
+            watchdog.heartbeat();
+        }
         return sessions.get(sessionId);
     }
 }

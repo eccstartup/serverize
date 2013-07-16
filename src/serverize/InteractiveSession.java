@@ -29,4 +29,15 @@ public class InteractiveSession {
     public void feedKeyboardInput(String input) {
         writer.put(input);
     }
+
+    public synchronized void destroy() {
+        if (process == null) return;
+        process.destroy();
+        process = null;
+        System.out.println("a program is shutdown");
+    }
+
+    protected void finalize() {
+        destroy();
+    }
 }

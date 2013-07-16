@@ -17,6 +17,9 @@ public class HomeServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("request URI: " + request.getRequestURI());
+        if (!request.getRequestURI().equals("/")) return;
+
         String sessionId = InteractiveSessionManager.getInstance().newSession(program);
         if (sessionId == null) return;
 
