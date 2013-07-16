@@ -15,32 +15,31 @@ public class InteractiveSessionManager {
 
     private Map<String, InteractiveSession> sessions;
     private Map<String, Watchdog> watchdogs;
+    private Map<String, Thread> shutdownHooks;
 
     private InteractiveSessionManager() {
         sessions = new ConcurrentHashMap<String, InteractiveSession>();
         watchdogs = new ConcurrentHashMap<String, Watchdog>();
+        shutdownHooks = new ConcurrentHashMap<String, Thread>();
     }
 
-    public String newSession(String program) {
+    public String newSession(String program) throws InterruptedException {
         try {
-            final InteractiveSession session = new InteractiveSession(program);
-            final String sessionId = UUID.randomUUID().toString();
+            InteractiveSession session = new InteractiveSession(program);
+            String sessionId = UUID.randomUUID().toString();
             sessions.put(sessionId, session);
 
-            Watchdog watchdog = new Watchdog(sessionId, session, sessions);
+            Watchdog watchdog = new Watchdog(sessionId);
             watchdogs.put(sessionId, watchdog);
             watchdog.start();
 
-            Runtime.getRuntime().addShutdownHook(new Thread() {
-                public void run() {
-                    System.out.println("runtime is shutting down... destroy session " + sessionId);
-                    session.destroy();
-                }
-            });
+            Thread shutdownHook = new ShutdownHook(sessionId);
+            shutdownHooks.put(sessionId, shutdownHook);
+            Runtime.getRuntime().addShutdownHook(shutdownHook);
 
             return sessionId;
         }
-        catch (IOException | InterruptedException e) {
+        catch (IOException e) {
             e.printStackTrace();
             return null;
         }
@@ -52,5 +51,17 @@ public class InteractiveSessionManager {
             watchdog.heartbeat();
         }
         return sessions.get(sessionId);
+    }
+
+    public void killSession(String sessionId) {
+        if (sessions.containsKey(sessionId)) {
+            sessions.remove(sessionId).destroy();
+        }
+        if (watchdogs.containsKey(sessionId)) {
+            watchdogs.remove(sessionId).interrupt();
+        }
+        if (shutdownHooks.containsKey(sessionId)) {
+            Runtime.getRuntime().removeShutdownHook(shutdownHooks.remove(sessionId));
+        }
     }
 }

@@ -30,20 +30,18 @@ public class ReaderThread extends Thread {
 
     public void run() {
         try {
-            while (true) {
+            while (!isInterrupted()) {
                 byte[] b = new byte[1024];
                 int count = in.read(b);
                 if (count == -1) break;
-                try {
-                    buffer.put(new Pair(b, count));
-                }
-                catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                buffer.put(new Pair(b, count));
             }
         }
         catch (IOException e) {
             e.printStackTrace();
+        }
+        catch (InterruptedException e) {
+            // exit
         }
     }
 

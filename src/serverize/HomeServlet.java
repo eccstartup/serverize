@@ -20,7 +20,13 @@ public class HomeServlet extends HttpServlet {
         System.out.println("request URI: " + request.getRequestURI());
         if (!request.getRequestURI().equals("/")) return;
 
-        String sessionId = InteractiveSessionManager.getInstance().newSession(program);
+        String sessionId = null;
+        try {
+            sessionId = InteractiveSessionManager.getInstance().newSession(program);
+        }
+        catch (InterruptedException e) {
+            // ignore
+        }
         if (sessionId == null) return;
 
         response.setContentType("text/html");

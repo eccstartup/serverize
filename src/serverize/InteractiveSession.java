@@ -26,15 +26,19 @@ public class InteractiveSession {
         return reader.take();
     }
 
-    public void feedKeyboardInput(String input) {
+    public void feedKeyboardInput(String input) throws InterruptedException {
         writer.put(input);
     }
 
     public synchronized void destroy() {
         if (process == null) return;
+
         process.destroy();
         process = null;
         System.out.println("a program is shutdown");
+
+        reader.interrupt();
+        writer.interrupt();
     }
 
     protected void finalize() {

@@ -16,29 +16,24 @@ public class WriterThread extends Thread {
     }
 
     public void run() {
-        while (true) {
-            try {
+        try {
+            while (!isInterrupted()) {
                 String s = buffer.take();
                 if (s.isEmpty()) continue;
                 String line = s + "\n";
                 out.write(line.getBytes());
                 out.flush();
             }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (InterruptedException e) {
+            // exit
         }
     }
 
-    public void put(String s) {
-        try {
-            buffer.put(s);
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void put(String s) throws InterruptedException {
+        buffer.put(s);
     }
 }

@@ -20,7 +20,12 @@ public class KeyboardInputServlet extends HttpServlet {
         InteractiveSession session = InteractiveSessionManager.getInstance().getSession(sessionId);
         if (session == null) return;
 
-        session.feedKeyboardInput(input);
+        try {
+            session.feedKeyboardInput(input);
+        }
+        catch (InterruptedException e) {
+            // ignore
+        }
 
         response.setContentType("text/plain");
         response.setStatus(HttpServletResponse.SC_OK);
