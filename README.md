@@ -1,0 +1,7 @@
+serverize
+=========
+
+Turn arbitrary shell program into a web server
+
+1. record heartbeats and timeout threads
+2. kill processes gracefully
