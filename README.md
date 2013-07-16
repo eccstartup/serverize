@@ -21,5 +21,6 @@ Configuration via environment variables:
 - `SESSION_TIMEOUT_MS`, default: 10 000
 
 TODO items:
+
 1. combine inputbox and console (try https://github.com/jcubic/jquery.terminal)
 2. stderr
