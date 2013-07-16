@@ -31,14 +31,18 @@ public class InteractiveSession {
     }
 
     public synchronized void destroy() {
-        if (process == null) return;
-
-        process.destroy();
-        process = null;
-        System.out.println("a program is shutdown");
-
-        reader.interrupt();
-        writer.interrupt();
+        if (process != null) {
+            process.destroy();
+            process = null;
+        }
+        if (reader != null) {
+            reader.interrupt();
+            reader = null;
+        }
+        if (writer != null) {
+            writer.interrupt();
+            writer = null;
+        }
     }
 
     protected void finalize() {

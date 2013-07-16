@@ -20,36 +20,34 @@ public class HomeServlet extends HttpServlet {
         System.out.println("request URI: " + request.getRequestURI());
         if (!request.getRequestURI().equals("/")) return;
 
-        String sessionId = null;
         try {
-            sessionId = InteractiveSessionManager.getInstance().newSession(program);
+            String sessionId = InteractiveSessionManager.getInstance().newSession(program);
+
+            response.setContentType("text/html");
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().print("<!DOCTYPE html>"
+                + "<html>"
+                + "<head>"
+                + "<meta charset=\"utf-8\">"
+                + "<title>" + program + "</title>"
+                + "<style>"
+                + "* { font-family: monospace; font-size: 20px; margin: 0; padding: 0; }"
+                + "html, body { width: 100%; height: 100%; }"
+                + "#inputbox { position: absolute; top: 0; left: 0; right: 0; height: 30px; width: 100%; }"
+                + "#console { position: absolute; top: 30px; left: 0; right: 0; bottom: 0; width: 100%; }"
+                + "</style>"
+                + "<script src=\"http://code.jquery.com/jquery-1.10.2.min.js\"></script>"
+                + "<script>window.sessionId = '" + sessionId + "';</script>"
+                + "<script src=\"script.js\"></script>"
+                + "</head>"
+                + "<body>"
+                + "<input type=\"text\" id=\"inputbox\">"
+                + "<textarea id=\"console\"></textarea>"
+                + "</body>"
+                + "</html>");
         }
         catch (InterruptedException e) {
             // ignore
         }
-        if (sessionId == null) return;
-
-        response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().print("<!DOCTYPE html>"
-            + "<html>"
-            + "<head>"
-            + "<meta charset=\"utf-8\">"
-            + "<title>" + program + "</title>"
-            + "<style>"
-            + "* { font-family: monospace; font-size: 20px; margin: 0; padding: 0; }"
-            + "html, body { width: 100%; height: 100%; }"
-            + "#inputbox { position: absolute; top: 0; left: 0; right: 0; height: 30px; width: 100%; }"
-            + "#console { position: absolute; top: 30px; left: 0; right: 0; bottom: 0; width: 100%; }"
-            + "</style>"
-            + "<script src=\"http://code.jquery.com/jquery-1.10.2.min.js\"></script>"
-            + "<script>window.sessionId = '" + sessionId + "';</script>"
-            + "<script src=\"script.js\"></script>"
-            + "</head>"
-            + "<body>"
-            + "<input type=\"text\" id=\"inputbox\">"
-            + "<textarea id=\"console\"></textarea>"
-            + "</body>"
-            + "</html>");
     }
 }
