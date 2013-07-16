@@ -3,7 +3,7 @@ serverize
 
 This tool turns an arbitrary shell program (especially REPLs) into a web server.
 Users can create new instances of the shell program and interact with them using a web interface.
-By using this interface, users can have access to the shell program without actually installing and running it on their own machine.
+By using this interface, users can have access to the shell program without actually installing or running it on their own machines.
 This could be especially helpful for teaching programming languages (those with a REPL, of course) in a class.
 
 Note that the program instances created by this tool have the same privilege as the user who runs this tool.
