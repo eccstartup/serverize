@@ -16,4 +16,8 @@ $(function() {
       $inputbox.focus();
     });
   }, 1000);
+  
+  window.onbeforeunload = function() {
+    $.post('/unload', { sessionId: window.sessionId });
+  };
 });

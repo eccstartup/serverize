@@ -13,6 +13,7 @@ public class Serverizer {
         context.addServlet(new ServletHolder(new HomeServlet(args[0])), "/");
         context.addServlet(new ServletHolder(new KeyboardInputServlet()), "/input");
         context.addServlet(new ServletHolder(new ScreenOutputServlet()), "/output");
+        context.addServlet(new ServletHolder(new SessionUnloadServlet()), "/unload");
         context.addServlet(new ServletHolder(new ScriptServlet()), "/script.js");
 
         Server server = new Server(9999);
