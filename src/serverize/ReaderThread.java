@@ -20,6 +20,8 @@ public class ReaderThread extends Thread {
         }
     }
 
+    private static final int READER_THREAD_BUFFER_SIZE = Configuration.loadInt("READER_THREAD_BUFFER_SIZE", 1024);
+
     private InputStream in;
     private BlockingQueue<Pair> buffer;
 
@@ -31,7 +33,7 @@ public class ReaderThread extends Thread {
     public void run() {
         try {
             while (!isInterrupted()) {
-                byte[] b = new byte[1024];
+                byte[] b = new byte[READER_THREAD_BUFFER_SIZE];
                 int count = in.read(b);
                 if (count == -1) break;
                 buffer.put(new Pair(b, count));

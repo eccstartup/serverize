@@ -9,7 +9,8 @@ import java.util.concurrent.TimeUnit;
 
 public class InteractiveSessionManager {
 
-    private static final int MAX_SESSIONS = 5;
+    private static final int MAX_SESSIONS = Configuration.loadInt("MAX_SESSIONS", 5);
+    private static final int SESSION_WAIT_SECONDS = Configuration.loadInt("SESSION_WAIT_SECONDS", 10);
 
     private static InteractiveSessionManager instance = new InteractiveSessionManager();
 
@@ -30,7 +31,7 @@ public class InteractiveSessionManager {
     }
 
     public String newSession(String program) throws InterruptedException, IOException {
-        if (!availableSessions.tryAcquire(10, TimeUnit.SECONDS)) {
+        if (!availableSessions.tryAcquire(SESSION_WAIT_SECONDS, TimeUnit.SECONDS)) {
             throw new RuntimeException("User limit exceeded: MAX_SESSIONS=" + MAX_SESSIONS);
         }
 
