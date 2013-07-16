@@ -42,6 +42,6 @@ public class Watchdog extends Thread {
 
     public void heartbeat() {
         System.out.println("heartbeat " + sessionId);
-        this.lastHeartbeatTime = System.currentTimeMillis();
+        lastHeartbeatTime = System.currentTimeMillis();
     }
 }
