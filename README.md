@@ -23,3 +23,6 @@ Configuration via environment variables:
 TODO items:
 
 1. stderr
+2. Ctrl-C, Ctrl-D, etc.
+3. Keep command until output is updated (now the command disappears as soon as you hit enter and comes back a while later)
+4. Notify via the web interface when the underlying process finishes execution, and report the exit status
