@@ -6,12 +6,14 @@ import java.io.OutputStream;
 
 public class InteractiveSession {
 
+    private static final String SCRIPT_UTILITY = Configuration.loadString("SCRIPT_UTILITY_PATH", "/usr/bin/script");
+
     private Process process;
     private ReaderThread reader;
     private WriterThread writer;
 
     public InteractiveSession(String program) throws IOException, InterruptedException {
-        process = new ProcessBuilder("/usr/bin/script", "-q", "/dev/null", program).start();
+        process = new ProcessBuilder(SCRIPT_UTILITY, "-q", "/dev/null", program).start();
         OutputStream stdin = process.getOutputStream();
         InputStream stdout = process.getInputStream();
         InputStream stderr = process.getErrorStream();

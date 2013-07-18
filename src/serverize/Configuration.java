@@ -13,4 +13,10 @@ public class Configuration {
         if (value == null) return i;
         return Long.valueOf(value);
     }
+
+    public static String loadString(String name, String s) {
+        String value = System.getenv(name);
+        if (value == null) return s;
+        return value;
+    }
 }
