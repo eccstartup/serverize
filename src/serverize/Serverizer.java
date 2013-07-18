@@ -1,5 +1,7 @@
 package serverize;
 
+import javax.servlet.http.HttpServlet;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -19,11 +21,16 @@ public class Serverizer {
 
         ServletContextHandler context = new ServletContextHandler();
         context.setContextPath("/");
+
         context.addServlet(new ServletHolder(new HomeServlet(program)), "/");
         context.addServlet(new ServletHolder(new KeyboardInputServlet()), "/input");
         context.addServlet(new ServletHolder(new ScreenOutputServlet()), "/output");
         context.addServlet(new ServletHolder(new SessionUnloadServlet()), "/unload");
-        context.addServlet(new ServletHolder(new ScriptServlet()), "/script.js");
+
+        HttpServlet staticFiles = new StaticFilesServlet();
+        context.addServlet(new ServletHolder(staticFiles), "/style.css");
+        context.addServlet(new ServletHolder(staticFiles), "/jwerty.js");
+        context.addServlet(new ServletHolder(staticFiles), "/script.js");
 
         Server server = new Server(port);
         server.setHandler(context);
