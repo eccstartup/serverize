@@ -2,6 +2,7 @@
 html, body { width: 100%; height: 100%; }
 .consolized-inner { font-family: monospace; font-size: 20px; }
 .consolized-inner .char { color: black; }
+.consolized-inner .waiting.char { color: gray; }
 .consolized-inner .command.char { color: green; }
 .consolized-inner .linebreak { display: block; }
 .consolized-inner .cursor { border-bottom: 1px solid gray; }

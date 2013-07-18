@@ -1,7 +1,8 @@
 $.fn.consolize = function(commandHandler) {
   var self = {
     output: '',
-    command: ''
+    command: '',
+    waiting: '' // the command sent to the server but not yet responded
   };
   
   var $inner = $('<pre class="consolized-inner"></pre>');
@@ -17,6 +18,9 @@ $.fn.consolize = function(commandHandler) {
       else {
         parts.push('<span class="char">' + self.output[i] + '</span>');
       }
+    }
+    for (i = 0; i < self.waiting.length; i++) {
+      parts.push('<span class="waiting char">' + self.waiting[i] + '</span>');
     }
     for (i = 0; i < self.command.length; i++) {
       parts.push('<span class="command char">' + self.command[i] + '</span>');
@@ -35,6 +39,7 @@ $.fn.consolize = function(commandHandler) {
   }).keypress(function(e) {
     if (jwerty.is('enter', e)) {
       commandHandler(self.command);
+      self.waiting = self.command;
       self.command = '';
       $input.val('');
       e.preventDefault();
@@ -52,6 +57,7 @@ $.fn.consolize = function(commandHandler) {
   return $.extend(this, {
     output: function(data) {
       self.output += data;
+      self.waiting = '';
       redraw();
     }
   });
